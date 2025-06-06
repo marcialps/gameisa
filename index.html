@@ -152,29 +152,51 @@
 
   <script>
     // Dados do jogo
-    const desafios = [
-      {
-        codigo: `const cifra = (texto, chave) => texto.split('').map(l => String.fromCharCode(l.charCodeAt(0) + chave)).join('');\nconst frase = 'ISA';\nconst codificada = cifra(frase, 1);`,
-        frase: 'ISA',
-        codificada: 'JTB',
-        alternativas: ['ISA', 'JTB', 'HTZ', 'KUC'],
-        resolucao: 'O código soma 1 ao valor de cada caractere da frase. "ISA" vira "JTB".'
-      },
-      {
-        codigo: `function inverter(str) {\n  return str.split('').reverse().join('');\n}\nconst resultado = inverter('ISA');`,
-        frase: 'ISA',
-        codificada: 'ASI',
-        alternativas: ['ISA', 'ASI', 'AIS', 'SIA'],
-        resolucao: 'O código inverte a string. "ISA" vira "ASI".'
-      },
-      {
-        codigo: `let texto = 'ISA';\nlet resultado = texto.replace(/A/, 'O');`,
-        frase: 'ISA',
-        codificada: 'ISO',
-        alternativas: ['ISO', 'ISA', 'IOS', 'OIS'],
-        resolucao: 'O código substitui o "A" por "O". "ISA" vira "ISO".'
+    function gerarAlfabetoCriptografia() {
+      const letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      const simbolos = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%&*';
+      let pool = simbolos.split('');
+      pool = pool.sort(() => Math.random() - 0.5); // embaralha
+      const alfabeto = {};
+      for (let i = 0; i < letras.length; i++) {
+        alfabeto[letras[i]] = pool[i];
       }
-    ];
+      return alfabeto;
+    }
+
+    function mostrarAlfabeto(alfabeto) {
+      let linhas = [];
+      for (const letra in alfabeto) {
+        linhas.push(`${letra} → ${alfabeto[letra]}`);
+      }
+      return linhas.join('\n');
+    }
+
+    function criptografar(frase, alfabeto) {
+      return frase.toUpperCase().split('').map(l => alfabeto[l] || l).join('');
+    }
+
+    function gerarDesafio() {
+      const frasesPossiveis = [
+        'ISA', 'CASA', 'BOLA', 'GATO', 'LUZ', 'PAZ', 'SOL', 'DADO', 'FADA', 'RISO', 'VIDA', 'AMOR', 'LAGO', 'FARO', 'MESA'
+      ];
+      const frase = frasesPossiveis[Math.floor(Math.random() * frasesPossiveis.length)];
+      const codificada = criptografar(frase, gerarAlfabetoCriptografia());
+      // Gera alternativas
+      let alternativas = [frase];
+      while (alternativas.length < 4) {
+        let alt = frasesPossiveis[Math.floor(Math.random() * frasesPossiveis.length)];
+        if (!alternativas.includes(alt)) alternativas.push(alt);
+      }
+      alternativas = alternativas.sort(() => Math.random() - 0.5);
+      return {
+        frase,
+        codificada,
+        alternativas,
+        resolucao: `Utilizando o alfabeto mostrado, cada letra da frase foi substituída pelo símbolo correspondente.`
+      };
+    }
+
     let config = {
       tempoMemorizacao: 7,
       tempoFrase: 10
@@ -182,6 +204,7 @@
     let desafioAtual = null;
     let timer = null;
     let tempoRestante = 0;
+    let alfabetoAtual = null;
 
     function mostrarTela(id) {
       document.querySelectorAll('.container').forEach(el => el.classList.add('oculto'));
@@ -189,14 +212,14 @@
     }
 
     function iniciarJogo() {
-      desafioAtual = desafios[Math.floor(Math.random() * desafios.length)];
+      desafioAtual = gerarDesafio();
       mostrarTela('tela-jogo');
-      document.getElementById('codigo-memorizacao').textContent = desafioAtual.codigo;
+      document.getElementById('codigo-memorizacao').textContent = mostrarAlfabeto(gerarAlfabetoCriptografia());
       tempoRestante = config.tempoMemorizacao;
-      atualizarContador('contador-memorizacao', tempoRestante, 'Memorize o código!');
+      atualizarContador('contador-memorizacao', tempoRestante, 'Memorize o alfabeto!');
       timer = setInterval(() => {
         tempoRestante--;
-        atualizarContador('contador-memorizacao', tempoRestante, 'Memorize o código!');
+        atualizarContador('contador-memorizacao', tempoRestante, 'Memorize o alfabeto!');
         if (tempoRestante <= 0) {
           clearInterval(timer);
           mostrarFrase();
@@ -236,7 +259,7 @@
       const acertou = resposta === desafioAtual.frase;
       document.getElementById('resultado-titulo').textContent = acertou ? 'Parabéns, você acertou!' : 'Que pena, você errou!';
       document.getElementById('resposta-correta').innerHTML = `<b>Resposta correta:</b> ${desafioAtual.frase}`;
-      document.getElementById('resolucao').textContent = desafioAtual.resolucao;
+      document.getElementById('resolucao').textContent = desafioAtual.resolucao + '\n\nAlfabeto utilizado:\n' + mostrarAlfabeto(gerarAlfabetoCriptografia());
     }
 
     function abrirConfiguracoes() {
