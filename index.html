@@ -152,14 +152,21 @@
 
   <script>
     // Dados do jogo
-    function gerarAlfabetoCriptografia() {
+    function gerarAlfabetoCriptografia(frase) {
       const letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
       const simbolos = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%&*';
       let pool = simbolos.split('');
       pool = pool.sort(() => Math.random() - 0.5); // embaralha
+      // Letras necessárias na frase
+      let letrasNecessarias = Array.from(new Set(frase.toUpperCase().replace(/[^A-Z]/g, '').split('')));
+      // Adiciona até 5 letras extras aleatórias
+      let extras = letras.split('').filter(l => !letrasNecessarias.includes(l));
+      extras = extras.sort(() => Math.random() - 0.5).slice(0, Math.min(5, extras.length));
+      let letrasAlfabeto = letrasNecessarias.concat(extras);
+      // Monta o alfabeto parcial
       const alfabeto = {};
-      for (let i = 0; i < letras.length; i++) {
-        alfabeto[letras[i]] = pool[i];
+      for (let i = 0; i < letrasAlfabeto.length; i++) {
+        alfabeto[letrasAlfabeto[i]] = pool[i];
       }
       return alfabeto;
     }
@@ -181,7 +188,8 @@
         'ISA', 'CASA', 'BOLA', 'GATO', 'LUZ', 'PAZ', 'SOL', 'DADO', 'FADA', 'RISO', 'VIDA', 'AMOR', 'LAGO', 'FARO', 'MESA'
       ];
       const frase = frasesPossiveis[Math.floor(Math.random() * frasesPossiveis.length)];
-      const codificada = criptografar(frase, gerarAlfabetoCriptografia());
+      const alfabeto = gerarAlfabetoCriptografia(frase);
+      const codificada = criptografar(frase, alfabeto);
       // Gera alternativas
       let alternativas = [frase];
       while (alternativas.length < 4) {
@@ -190,6 +198,7 @@
       }
       alternativas = alternativas.sort(() => Math.random() - 0.5);
       return {
+        alfabeto,
         frase,
         codificada,
         alternativas,
@@ -214,7 +223,7 @@
     function iniciarJogo() {
       desafioAtual = gerarDesafio();
       mostrarTela('tela-jogo');
-      document.getElementById('codigo-memorizacao').textContent = mostrarAlfabeto(gerarAlfabetoCriptografia());
+      document.getElementById('codigo-memorizacao').textContent = mostrarAlfabeto(desafioAtual.alfabeto);
       tempoRestante = config.tempoMemorizacao;
       atualizarContador('contador-memorizacao', tempoRestante, 'Memorize o alfabeto!');
       timer = setInterval(() => {
@@ -259,7 +268,7 @@
       const acertou = resposta === desafioAtual.frase;
       document.getElementById('resultado-titulo').textContent = acertou ? 'Parabéns, você acertou!' : 'Que pena, você errou!';
       document.getElementById('resposta-correta').innerHTML = `<b>Resposta correta:</b> ${desafioAtual.frase}`;
-      document.getElementById('resolucao').textContent = desafioAtual.resolucao + '\n\nAlfabeto utilizado:\n' + mostrarAlfabeto(gerarAlfabetoCriptografia());
+      document.getElementById('resolucao').textContent = desafioAtual.resolucao + '\n\nAlfabeto utilizado:\n' + mostrarAlfabeto(desafioAtual.alfabeto);
     }
 
     function abrirConfiguracoes() {
