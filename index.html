@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Jogo de Memorização de Código</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Fira+Mono:wght@400;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --primary: #4f8cff;
@@ -12,154 +12,254 @@
       --accent: #ffb347;
       --danger: #ff4f4f;
       --success: #4fffa1;
-      --radius: 16px;
-      --shadow: 0 4px 24px rgba(0,0,0,0.08);
+      --radius: 20px;
+      --shadow: 0 6px 32px rgba(0,0,0,0.10);
+      --transition: 0.3s cubic-bezier(.4,0,.2,1);
+      --bg-gradient: linear-gradient(135deg, #e0e7ff 0%, #f5f7fa 100%);
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: 'Roboto', sans-serif;
-      background: var(--secondary);
+      background: var(--bg-gradient);
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
+      transition: background var(--transition);
     }
     .container {
       background: #fff;
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      padding: 32px 24px;
+      padding: 40px 32px 32px 32px;
       min-width: 340px;
-      max-width: 95vw;
-      width: 400px;
+      max-width: 420px;
+      width: 100%;
       text-align: center;
-      animation: fadeIn 0.5s;
+      position: relative;
+      animation: fadeIn 0.7s;
+      margin: 24px 0;
+      overflow: hidden;
     }
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; transform: translateY(40px) scale(0.98);}
+      to { opacity: 1; transform: translateY(0) scale(1);}
+    }
+    .header-img {
+      width: 62px;
+      height: 62px;
+      margin-bottom: 12px;
+      animation: popIn 1s;
+    }
+    @keyframes popIn {
+      0% {transform: scale(0.6);}
+      80% {transform: scale(1.1);}
+      100% {transform: scale(1);}
     }
     h1, h2, h3 {
-      margin: 0 0 16px 0;
+      margin: 0 0 18px 0;
       font-weight: 700;
       color: var(--primary);
+      letter-spacing: 0.5px;
+    }
+    .subtitle {
+      color: #666;
+      font-size: 1.05em;
+      margin-bottom: 24px;
     }
     button {
       background: var(--primary);
       color: #fff;
       border: none;
       border-radius: var(--radius);
-      padding: 12px 24px;
-      margin: 8px 0;
+      padding: 14px 0;
+      width: 100%;
       font-size: 1.1em;
       font-weight: 700;
       cursor: pointer;
-      transition: background 0.2s;
-      box-shadow: 0 2px 8px rgba(79,140,255,0.08);
+      transition: background var(--transition), transform 0.15s;
+      margin: 10px 0;
+      box-shadow: 0 2px 12px rgba(79,140,255,0.11);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
     }
-    button:hover { background: #2563eb; }
+    button:hover { background: #2563eb; transform: translateY(-2px) scale(1.02);}
     .btn-secondary { background: var(--accent); color: #222; }
     .btn-secondary:hover { background: #ff9800; }
     .btn-danger { background: var(--danger); }
     .btn-danger:hover { background: #d32f2f; }
     .config-group {
-      margin: 16px 0;
+      margin: 18px 0;
       text-align: left;
     }
     .config-group label {
       display: block;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
       color: #333;
+      font-weight: 500;
     }
     .config-group input {
       width: 100%;
-      padding: 8px;
-      border-radius: 8px;
+      padding: 10px;
+      border-radius: 10px;
       border: 1px solid #ddd;
-      margin-bottom: 8px;
-    }
-    pre {
-      background: #f0f4fa;
-      border-radius: 8px;
-      padding: 16px;
-      text-align: left;
-      overflow-x: auto;
+      margin-bottom: 10px;
       font-size: 1em;
-      margin: 16px 0;
+      background: #f7faff;
+      transition: border var(--transition);
+    }
+    .config-group input:focus {
+      border: 1.5px solid var(--primary);
+      outline: none;
     }
     .alfabeto-memorizacao {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
       font-family: 'Fira Mono', 'JetBrains Mono', 'Roboto Mono', 'Consolas', monospace;
-      font-size: 1.25em;
+      font-size: 1.18em;
       background: linear-gradient(90deg, #e0e7ff 0%, #f0f4fa 100%);
       border: 2px solid #4f8cff;
       border-radius: 18px;
-      box-shadow: 0 2px 16px rgba(79,140,255,0.10);
+      box-shadow: 0 2px 20px rgba(79,140,255,0.12);
       color: #222;
-      padding: 24px 12px;
-      margin: 24px 0 12px 0;
-      letter-spacing: 1px;
+      padding: 26px 14px;
+      margin: 28px 0 16px 0;
+      letter-spacing: 1.2px;
       width: 100%;
-      max-width: 340px;
+      max-width: 350px;
       text-align: center;
-      transition: box-shadow 0.2s;
+      transition: box-shadow var(--transition), border var(--transition);
+      position: relative;
     }
     .alfabeto-memorizacao:hover {
-      box-shadow: 0 4px 32px rgba(79,140,255,0.18);
+      box-shadow: 0 6px 36px rgba(79,140,255,0.19);
+      border-color: var(--accent);
+    }
+    .alternativas {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin: 20px 0;
     }
     .alternativas button {
-      display: block;
-      width: 100%;
-      margin: 8px 0;
+      margin: 0;
+      font-size: 1.08em;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 500;
+      transition: background var(--transition), color var(--transition), transform 0.14s;
+    }
+    .alternativas button:hover {
+      background: var(--success);
+      color: #222;
+      transform: scale(1.03);
     }
     .resolucao {
       background: var(--success);
       color: #222;
-      border-radius: 8px;
-      padding: 16px;
-      margin-top: 16px;
+      border-radius: 10px;
+      padding: 18px;
+      margin-top: 18px;
       font-weight: 500;
+      font-size: 1.05em;
+      white-space: pre-line;
+      box-shadow: 0 1px 8px rgba(79,255,161,0.09);
     }
     .oculto { display: none; }
+    .progress-bar-bg {
+      background: #e0e7ff;
+      border-radius: 8px;
+      width: 100%;
+      height: 16px;
+      margin: 12px 0 0 0;
+      overflow: hidden;
+      box-shadow: 0 1px 4px rgba(79,140,255,0.09);
+    }
+    .progress-bar {
+      background: var(--primary);
+      height: 100%;
+      width: 100%;
+      transition: width 1s linear;
+    }
+    .footer-tip {
+      color: #888;
+      font-size: 0.98em;
+      margin-top: 18px;
+      font-style: italic;
+      opacity: 0.9;
+      letter-spacing: 0.1px;
+    }
+    @media (max-width: 600px) {
+      .container { padding: 22px 6vw; min-width: unset; }
+      .alfabeto-memorizacao { font-size: 1em; padding: 16px 4px;}
+    }
   </style>
 </head>
 <body>
+  <!-- Tela de Boas-vindas -->
   <div class="container" id="tela-boasvindas">
-    <h1>Bem-vindo ao Jogo de Memorização!</h1>
-    <button onclick="iniciarJogo()">Jogar</button>
-    <button class="btn-secondary" onclick="abrirConfiguracoes()">Configurações</button>
-    <button class="btn-danger" onclick="sairJogo()">Sair</button>
+    <img src="https://img.icons8.com/color/96/brain.png" alt="Cérebro" class="header-img" />
+    <h1>Jogo de Memorização</h1>
+    <div class="subtitle">Teste sua memória decifrando códigos secretos!</div>
+    <button onclick="iniciarJogo()">
+      <svg width="22" height="22" fill="none" viewBox="0 0 24 24"><path fill="#fff" d="M8 5v14l11-7z"/></svg>
+      Jogar
+    </button>
+    <button class="btn-secondary" onclick="abrirConfiguracoes()">
+      <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path fill="#222" d="M12 15.5a3.5 3.5 0 100-7 3.5 3.5 0 000 7zm7.43-2.9l1.77-1.03a1 1 0 000-1.74l-1.77-1.03a7.03 7.03 0 00-.5-1.2l.34-1.89a1 1 0 00-.76-1.14l-2-.34a7.03 7.03 0 00-1.2-.5l-1.03-1.77a1 1 0 00-1.74 0l-1.03 1.77a7.03 7.03 0 00-1.2.5l-1.89-.34a1 1 0 00-1.14.76l-.34 2a7.03 7.03 0 00-.5 1.2l-1.77 1.03a1 1 0 000 1.74l1.77 1.03c.14.41.31.81.5 1.2l-.34 1.89a1 1 0 00.76 1.14l2 .34c.39.19.79.36 1.2.5l1.03 1.77a1 1 0 001.74 0l1.03-1.77c.41-.14.81-.31 1.2-.5l1.89.34a1 1 0 001.14-.76l.34-2c.19-.39.36-.79.5-1.2z"/></svg>
+      Configurações
+    </button>
+    <button class="btn-danger" onclick="sairJogo()">
+      <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path fill="#fff" d="M16 13v-2H7V8l-5 4 5 4v-3z"/><path fill="#fff" d="M20 19V5a2 2 0 00-2-2H8a2 2 0 00-2 2v4h2V5h10v14H8v-4H6v4a2 2 0 002 2h10a2 2 0 002-2z"/></svg>
+      Sair
+    </button>
+    <div class="footer-tip">Desafie-se: cada rodada é diferente!</div>
   </div>
 
+  <!-- Tela de Memorização -->
   <div class="container oculto" id="tela-jogo">
-    <h2>Memorize o código abaixo:</h2>
+    <img src="https://img.icons8.com/color/96/lock--v1.png" alt="Código" class="header-img" />
+    <h2>Memorize o alfabeto secreto:</h2>
     <div id="codigo-memorizacao" class="alfabeto-memorizacao"></div>
-    <div id="contador-memorizacao"></div>
+    <div class="progress-bar-bg">
+      <div id="progress-memorizacao" class="progress-bar"></div>
+    </div>
+    <div id="contador-memorizacao" class="footer-tip"></div>
   </div>
 
+  <!-- Tela de Frase Codificada -->
   <div class="container oculto" id="tela-frase">
-    <h2>Frase para decifrar:</h2>
-    <div id="frase-codificada" style="font-size:1.2em;margin:16px 0;"></div>
-    <div id="contador-frase"></div>
+    <img src="https://img.icons8.com/color/96/hidden.png" alt="Frase" class="header-img" />
+    <h2>Decifre a frase:</h2>
+    <div id="frase-codificada" style="font-size:1.25em;margin:18px 0;"></div>
+    <div class="progress-bar-bg">
+      <div id="progress-frase" class="progress-bar"></div>
+    </div>
+    <div id="contador-frase" class="footer-tip"></div>
   </div>
 
+  <!-- Tela de Alternativas -->
   <div class="container oculto" id="tela-alternativas">
+    <img src="https://img.icons8.com/color/96/question-mark.png" alt="Alternativas" class="header-img" />
     <h2>Qual é a frase correta?</h2>
     <div class="alternativas" id="alternativas"></div>
   </div>
 
+  <!-- Tela de Resultado -->
   <div class="container oculto" id="tela-resultado">
+    <img src="https://img.icons8.com/color/96/checked-2--v1.png" alt="Resultado" class="header-img" id="img-resultado"/>
     <h2 id="resultado-titulo"></h2>
     <div id="resposta-correta"></div>
     <div class="resolucao" id="resolucao"></div>
-    <button onclick="voltarInicio()">Voltar ao início</button>
+    <button onclick="voltarInicio()">
+      <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path fill="#fff" d="M10 19l-7-7 7-7v4h8v6h-8v4z"/></svg>
+      Voltar ao início
+    </button>
   </div>
 
+  <!-- Tela de Configurações -->
   <div class="container oculto" id="tela-configuracoes">
+    <img src="https://img.icons8.com/color/96/settings--v1.png" alt="Configurações" class="header-img" />
     <h2>Configurações do Jogo</h2>
     <div class="config-group">
       <label for="tempo-memorizacao">Tempo para memorizar o código (segundos):</label>
@@ -169,73 +269,29 @@
       <label for="tempo-frase">Tempo para decifrar a frase (segundos):</label>
       <input type="number" id="tempo-frase" min="2" max="30" value="10">
     </div>
-    <button onclick="salvarConfiguracoes()">Salvar</button>
-    <button class="btn-secondary" onclick="voltarInicio()">Voltar</button>
+    <button onclick="salvarConfiguracoes()">
+      <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path fill="#fff" d="M5 13l4 4L19 7"/></svg>
+      Salvar
+    </button>
+    <button class="btn-secondary" onclick="voltarInicio()">
+      <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path fill="#222" d="M10 19l-7-7 7-7v4h8v6h-8v4z"/></svg>
+      Voltar
+    </button>
   </div>
 
   <script>
-    // Dados do jogo
-    function gerarAlfabetoCriptografia(frase) {
-      const letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-      const simbolos = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%&*';
-      let pool = simbolos.split('');
-      pool = pool.sort(() => Math.random() - 0.5); // embaralha
-      // Letras necessárias na frase
-      let letrasNecessarias = Array.from(new Set(frase.toUpperCase().replace(/[^A-Z]/g, '').split('')));
-      // Adiciona até 5 letras extras aleatórias
-      let extras = letras.split('').filter(l => !letrasNecessarias.includes(l));
-      extras = extras.sort(() => Math.random() - 0.5).slice(0, Math.min(5, extras.length));
-      let letrasAlfabeto = letrasNecessarias.concat(extras);
-      // Monta o alfabeto parcial
-      const alfabeto = {};
-      for (let i = 0; i < letrasAlfabeto.length; i++) {
-        alfabeto[letrasAlfabeto[i]] = pool[i];
-      }
-      return alfabeto;
+    // O JS do seu código original pode ser reaproveitado.
+    // Adicione feedback visual nas barras de progresso:
+    function atualizarBarraProgresso(id, tempo, tempoTotal) {
+      const pct = Math.max(0, Math.min(100, (tempo/tempoTotal)*100));
+      document.getElementById(id).style.width = pct + '%';
     }
 
-    function mostrarAlfabeto(alfabeto) {
-      let linhas = [];
-      for (const letra in alfabeto) {
-        linhas.push(`${letra} → ${alfabeto[letra]}`);
-      }
-      return linhas.join('\n');
-    }
-
-    function criptografar(frase, alfabeto) {
-      return frase.toUpperCase().split('').map(l => alfabeto[l] || l).join('');
-    }
-
-    function gerarDesafio() {
-      const frasesPossiveis = [
-        'ISA', 'CASA', 'BOLA', 'GATO', 'LUZ', 'PAZ', 'SOL', 'DADO', 'FADA', 'RISO', 'VIDA', 'AMOR', 'LAGO', 'FARO', 'MESA'
-      ];
-      const frase = frasesPossiveis[Math.floor(Math.random() * frasesPossiveis.length)];
-      const alfabeto = gerarAlfabetoCriptografia(frase);
-      const codificada = criptografar(frase, alfabeto);
-      // Gera alternativas
-      let alternativas = [frase];
-      while (alternativas.length < 4) {
-        let alt = frasesPossiveis[Math.floor(Math.random() * frasesPossiveis.length)];
-        if (!alternativas.includes(alt)) alternativas.push(alt);
-      }
-      alternativas = alternativas.sort(() => Math.random() - 0.5);
-      return {
-        alfabeto,
-        frase,
-        codificada,
-        alternativas,
-        resolucao: `Utilizando o alfabeto mostrado, cada letra da frase foi substituída pelo símbolo correspondente.`
-      };
-    }
-
-    let config = {
-      tempoMemorizacao: 7,
-      tempoFrase: 10
-    };
+    // Adapte as funções de temporizador para usar a barra de progresso:
+    let config = { tempoMemorizacao: 7, tempoFrase: 10 };
     let desafioAtual = null;
     let timer = null;
-    let tempoRestante = 0;
+    let tempoRestante = 0, tempoTotal = 0;
     let alfabetoAtual = null;
 
     function mostrarTela(id) {
@@ -246,11 +302,14 @@
     function iniciarJogo() {
       desafioAtual = gerarDesafio();
       mostrarTela('tela-jogo');
-      document.getElementById('codigo-memorizacao').textContent = mostrarAlfabeto(desafioAtual.alfabeto);
+      document.getElementById('codigo-memorizacao').textContent = mostrarAlfabeto(desafioAtual.alfabeto, desafioAtual.frase);
       tempoRestante = config.tempoMemorizacao;
+      tempoTotal = config.tempoMemorizacao;
+      atualizarBarraProgresso('progress-memorizacao', tempoRestante, tempoTotal);
       atualizarContador('contador-memorizacao', tempoRestante, 'Memorize o alfabeto!');
       timer = setInterval(() => {
         tempoRestante--;
+        atualizarBarraProgresso('progress-memorizacao', tempoRestante, tempoTotal);
         atualizarContador('contador-memorizacao', tempoRestante, 'Memorize o alfabeto!');
         if (tempoRestante <= 0) {
           clearInterval(timer);
@@ -263,9 +322,12 @@
       mostrarTela('tela-frase');
       document.getElementById('frase-codificada').textContent = desafioAtual.codificada;
       tempoRestante = config.tempoFrase;
+      tempoTotal = config.tempoFrase;
+      atualizarBarraProgresso('progress-frase', tempoRestante, tempoTotal);
       atualizarContador('contador-frase', tempoRestante, 'Tempo para decifrar!');
       timer = setInterval(() => {
         tempoRestante--;
+        atualizarBarraProgresso('progress-frase', tempoRestante, tempoTotal);
         atualizarContador('contador-frase', tempoRestante, 'Tempo para decifrar!');
         if (tempoRestante <= 0) {
           clearInterval(timer);
@@ -290,8 +352,11 @@
       mostrarTela('tela-resultado');
       const acertou = resposta === desafioAtual.frase;
       document.getElementById('resultado-titulo').textContent = acertou ? 'Parabéns, você acertou!' : 'Que pena, você errou!';
+      document.getElementById('img-resultado').src = acertou
+        ? 'https://img.icons8.com/color/96/checked-2--v1.png'
+        : 'https://img.icons8.com/color/96/cancel--v1.png';
       document.getElementById('resposta-correta').innerHTML = `<b>Resposta correta:</b> ${desafioAtual.frase}`;
-      document.getElementById('resolucao').textContent = desafioAtual.resolucao + '\n\nAlfabeto utilizado:\n' + mostrarAlfabeto(desafioAtual.alfabeto);
+      document.getElementById('resolucao').textContent = desafioAtual.resolucao + '\n\nAlfabeto utilizado:\n' + mostrarAlfabeto(desafioAtual.alfabeto, desafioAtual.frase);
     }
 
     function abrirConfiguracoes() {
@@ -324,7 +389,94 @@
       document.getElementById(id).textContent = `${texto} (${tempo}s)`;
     }
 
-    // Iniciar na tela de boas-vindas
+    // Funções do jogo (copie as do seu código original)
+    // ... gerarAlfabetoCriptografia, mostrarAlfabeto, criptografar, gerarDesafio
+
+    // Gera um alfabeto de substituição aleatório (A-Z)
+    function gerarAlfabetoCriptografia() {
+      const letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+      const embaralhado = letras.slice();
+      for (let i = embaralhado.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [embaralhado[i], embaralhado[j]] = [embaralhado[j], embaralhado[i]];
+      }
+      const alfabeto = {};
+      letras.forEach((l, i) => { alfabeto[l] = embaralhado[i]; });
+      return alfabeto;
+    }
+
+    // Exibe apenas as letras necessárias para decifrar a frase + 5 extras
+    function mostrarAlfabeto(alfabeto, frase) {
+      // Letras únicas da frase (ignorando espaços e acentos)
+      const normalizar = c => c.normalize('NFD').replace(/[^A-Z]/g, '');
+      const letrasFrase = new Set(frase.toUpperCase().split('').map(normalizar).join('').split(''));
+      // Letras restantes
+      const todas = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+      const restantes = todas.filter(l => !letrasFrase.has(l));
+      // Seleciona 5 extras aleatórias
+      for (let i = restantes.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [restantes[i], restantes[j]] = [restantes[j], restantes[i]];
+      }
+      const extras = restantes.slice(0, 5);
+      // Junta as letras a exibir
+      const mostrar = Array.from(letrasFrase).concat(extras);
+      // Ordena para ficar bonito
+      mostrar.sort();
+      // Monta string
+      let s = '';
+      for (let l of mostrar) {
+        s += l + '→' + alfabeto[l] + '  ';
+      }
+      return s.trim();
+    }
+
+    // Criptografa uma frase usando o alfabeto de substituição
+    function criptografar(frase, alfabeto) {
+      return frase.toUpperCase().split('').map(c => {
+        if (alfabeto[c]) return alfabeto[c];
+        return c;
+      }).join('');
+    }
+
+    // Gera um desafio aleatório
+    function gerarDesafio() {
+      const frases = [
+        'SCOOBY DOO',
+        'MISTÉRIO NA MANSÃO',
+        'FANTASMA NA ESCOLA',
+        'VELMA É INTELIGENTE',
+        'CORRA SHAGGY',
+        'O MISTÉRIO ACABOU',
+        'DAPHNE E FRED',
+        'A VAN MISTERIOSA',
+        'SANDUICHE GIGANTE',
+        'O VILÃO FUGIU'
+      ];
+      const frase = frases[Math.floor(Math.random() * frases.length)];
+      const alfabeto = gerarAlfabetoCriptografia();
+      const codificada = criptografar(frase, alfabeto);
+      // Gera alternativas (1 correta + 2 erradas)
+      let alternativas = [frase];
+      while (alternativas.length < 3) {
+        const f = frases[Math.floor(Math.random() * frases.length)];
+        if (!alternativas.includes(f)) alternativas.push(f);
+      }
+      alternativas = alternativas.sort(() => Math.random() - 0.5);
+      // Explicação da resolução
+      let resolucao = '';
+      for (let i = 0; i < frase.length; i++) {
+        const orig = frase[i].toUpperCase();
+        if (alfabeto[orig]) {
+          resolucao += `${orig}→${alfabeto[orig]}  `;
+        } else {
+          resolucao += frase[i] + '  ';
+        }
+      }
+      return { frase, alfabeto, codificada, alternativas, resolucao };
+    }
+
+    // Para inicializar na tela de boas-vindas:
     mostrarTela('tela-boasvindas');
   </script>
 </body>
