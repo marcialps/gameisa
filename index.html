@@ -209,6 +209,10 @@
       <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path fill="#222" d="M12 15.5a3.5 3.5 0 100-7 3.5 3.5 0 000 7zm7.43-2.9l1.77-1.03a1 1 0 000-1.74l-1.77-1.03a7.03 7.03 0 00-.5-1.2l.34-1.89a1 1 0 00-.76-1.14l-2-.34a7.03 7.03 0 00-1.2-.5l-1.03-1.77a1 1 0 00-1.74 0l-1.03 1.77a7.03 7.03 0 00-1.2.5l-1.89-.34a1 1 0 00-1.14.76l-.34 2a7.03 7.03 0 00-.5 1.2l-1.77 1.03a1 1 0 000 1.74l1.77 1.03c.14.41.31.81.5 1.2l-.34 1.89a1 1 0 00.76 1.14l2 .34c.39.19.79.36 1.2.5l1.03 1.77a1 1 0 001.74 0l1.03-1.77c.41-.14.81-.31 1.2-.5l1.89.34a1 1 0 001.14-.76l.34-2c.19-.39.36-.79.5-1.2z"/></svg>
       Configurações
     </button>
+    <button class="btn-secondary" onclick="abrirSobre()">
+      <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path fill="#222" d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+      Sobre
+    </button>
     <button class="btn-danger" onclick="sairJogo()">
       <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path fill="#fff" d="M16 13v-2H7V8l-5 4 5 4v-3z"/><path fill="#fff" d="M20 19V5a2 2 0 00-2-2H8a2 2 0 00-2 2v4h2V5h10v14H8v-4H6v4a2 2 0 002 2h10a2 2 0 002-2z"/></svg>
       Sair
@@ -281,6 +285,22 @@
       <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path fill="#fff" d="M5 13l4 4L19 7"/></svg>
       Salvar
     </button>
+    <button class="btn-secondary" onclick="voltarInicio()">
+      <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path fill="#222" d="M10 19l-7-7 7-7v4h8v6h-8v4z"/></svg>
+      Voltar
+    </button>
+  </div>
+
+  <!-- Tela de Sobre -->
+  <div class="container oculto" id="tela-sobre">
+    <img src="https://img.icons8.com/color/96/info--v1.png" alt="Sobre" class="header-img" />
+    <h2>Sobre o Projeto</h2>
+    <div style="text-align:left; margin: 0 auto; max-width: 340px; font-size:1.08em; color:#333;">
+      <p><b>Projeto da Feira de Ciências da Escola CEPP de Ijuí.</b></p>
+      <p><b>Aluna e Desenvolvedora:</b> Isabella Vieira de Siqueira</p>
+      <p><b>Professor Orientador:</b> Luciano</p>
+      <p style="margin-top:18px; color:#666;">Junho/2025</p>
+    </div>
     <button class="btn-secondary" onclick="voltarInicio()">
       <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path fill="#222" d="M10 19l-7-7 7-7v4h8v6h-8v4z"/></svg>
       Voltar
@@ -373,6 +393,10 @@
       document.getElementById('tempo-frase').value = config.tempoFrase;
       document.getElementById('nivel-frase').value = config.nivel || 'facil';
       mostrarTela('tela-configuracoes');
+    }
+
+    function abrirSobre() {
+      mostrarTela('tela-sobre');
     }
 
     function salvarConfiguracoes() {
