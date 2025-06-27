@@ -310,7 +310,7 @@
     function iniciarJogo() {
       desafioAtual = gerarDesafio();
       mostrarTela('tela-jogo');
-      document.getElementById('codigo-memorizacao').textContent = mostrarAlfabeto(desafioAtual.alfabeto, desafioAtual.frase);
+      document.getElementById('codigo-memorizacao').innerHTML = mostrarAlfabeto(desafioAtual.alfabeto, desafioAtual.frase);
       tempoRestante = config.tempoMemorizacao;
       tempoTotal = config.tempoMemorizacao;
       atualizarBarraProgresso('progress-memorizacao', tempoRestante, tempoTotal);
@@ -348,7 +348,8 @@
       mostrarTela('tela-alternativas');
       const altDiv = document.getElementById('alternativas');
       altDiv.innerHTML = '';
-      desafioAtual.alternativas.forEach(alt => {
+      const alternativasEmbaralhadas = desafioAtual.alternativas.slice().sort(() => Math.random() - 0.5);
+      alternativasEmbaralhadas.forEach(alt => {
         const btn = document.createElement('button');
         btn.textContent = alt;
         btn.onclick = () => finalizarJogo(alt);
@@ -364,7 +365,7 @@
         ? 'https://img.icons8.com/color/96/checked-2--v1.png'
         : 'https://img.icons8.com/color/96/cancel--v1.png';
       document.getElementById('resposta-correta').innerHTML = `<b>Resposta correta:</b> ${desafioAtual.frase}`;
-      document.getElementById('resolucao').textContent = desafioAtual.resolucao + '\n\nAlfabeto utilizado:\n' + mostrarAlfabeto(desafioAtual.alfabeto, desafioAtual.frase);
+      document.getElementById('resolucao').innerHTML = desafioAtual.resolucao + '<br><br>Alfabeto utilizado:<br>' + mostrarAlfabeto(desafioAtual.alfabeto, desafioAtual.frase);
     }
 
     function abrirConfiguracoes() {
@@ -434,10 +435,10 @@
       const mostrar = Array.from(letrasFrase).concat(extras);
       // Ordena para ficar bonito
       mostrar.sort();
-      // Monta string
+      // Monta string com destaque em negrito na letra
       let s = '';
       for (let l of mostrar) {
-        s += l + '→' + alfabeto[l] + '  ';
+        s += '<b>' + l + '</b>→' + alfabeto[l] + '  ';
       }
       return s.trim();
     }
