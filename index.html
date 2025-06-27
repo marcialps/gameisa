@@ -269,6 +269,14 @@
       <label for="tempo-frase">Tempo para decifrar a frase (segundos):</label>
       <input type="number" id="tempo-frase" min="2" max="30" value="10">
     </div>
+    <div class="config-group">
+      <label for="nivel-frase">Nível das frases:</label>
+      <select id="nivel-frase">
+        <option value="facil">Fácil</option>
+        <option value="intermediario">Intermediário</option>
+        <option value="dificil">Difícil</option>
+      </select>
+    </div>
     <button onclick="salvarConfiguracoes()">
       <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path fill="#fff" d="M5 13l4 4L19 7"/></svg>
       Salvar
@@ -288,7 +296,7 @@
     }
 
     // Adapte as funções de temporizador para usar a barra de progresso:
-    let config = { tempoMemorizacao: 7, tempoFrase: 10 };
+    let config = { tempoMemorizacao: 7, tempoFrase: 10, nivel: 'facil' };
     let desafioAtual = null;
     let timer = null;
     let tempoRestante = 0, tempoTotal = 0;
@@ -362,14 +370,17 @@
     function abrirConfiguracoes() {
       document.getElementById('tempo-memorizacao').value = config.tempoMemorizacao;
       document.getElementById('tempo-frase').value = config.tempoFrase;
+      document.getElementById('nivel-frase').value = config.nivel || 'facil';
       mostrarTela('tela-configuracoes');
     }
 
     function salvarConfiguracoes() {
       const t1 = parseInt(document.getElementById('tempo-memorizacao').value);
       const t2 = parseInt(document.getElementById('tempo-frase').value);
+      const nivel = document.getElementById('nivel-frase').value;
       config.tempoMemorizacao = Math.max(2, Math.min(30, t1));
       config.tempoFrase = Math.max(2, Math.min(30, t2));
+      config.nivel = nivel;
       voltarInicio();
     }
 
@@ -439,20 +450,38 @@
       }).join('');
     }
 
-    // Gera um desafio aleatório
-    function gerarDesafio() {
-      const frases = [
+    // Frases separadas por nível
+    const frasesPorNivel = {
+      facil: [
         'SCOOBY DOO',
-        'MISTÉRIO NA MANSÃO',
-        'FANTASMA NA ESCOLA',
-        'VELMA É INTELIGENTE',
         'CORRA SHAGGY',
-        'O MISTÉRIO ACABOU',
         'DAPHNE E FRED',
         'A VAN MISTERIOSA',
         'SANDUICHE GIGANTE',
         'O VILÃO FUGIU'
-      ];
+      ],
+      intermediario: [
+        'MISTÉRIO NA MANSÃO',
+        'FANTASMA NA ESCOLA',
+        'VELMA É INTELIGENTE',
+        'O MISTÉRIO ACABOU',
+        'ENIGMA NA PRAIA',
+        'O MONSTRO DO LAGO'
+      ],
+      dificil: [
+        'O FANTASMA ROUBOU O TESOURO ESCONDIDO',
+        'A MÁSCARA DO VILÃO FOI REVELADA',
+        'INVESTIGAÇÃO NA FLORESTA ASSOMBRADA',
+        'O MISTÉRIO DO FAROL ABANDONADO',
+        'A EQUIPE DESVENDOU O ENIGMA FINAL',
+        'O VILÃO ESCAPOU PELA PASSAGEM SECRETA'
+      ]
+    };
+
+    // Gera um desafio aleatório
+    function gerarDesafio() {
+      const nivel = config.nivel || 'facil';
+      const frases = frasesPorNivel[nivel];
       const frase = frases[Math.floor(Math.random() * frases.length)];
       const alfabeto = gerarAlfabetoCriptografia();
       const codificada = criptografar(frase, alfabeto);
